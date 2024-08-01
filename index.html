@@ -3,11 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Test By Arefin</title>
+    <title>Typing Test by Arefin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .correct { color: green; }
+        .incorrect { color: red; }
+    </style>
 </head>
-<body>
-    <h1>
-        Ready for made typing test web
-    </h1>
+<body class="bg-gray-900 text-white flex mt-40 justify-center min-h-screen">
+    <div class="text-center">
+        <h1 class="text-3xl mb-4">Typing Speed Meter</h1>
+        <div class="mb-4">
+            <button id="easy" class="bg-blue-500 px-4 py-2 m-1">Easy</button>
+            <button id="medium" class="bg-yellow-500 px-4 py-2 m-1">Medium</button>
+            <button id="hard" class="bg-red-500 px-4 py-2 m-1">Hard</button>
+        </div>
+        <div class="mb-4" id="buttons-container">
+            <button id="time30" class="px-4 py-2 bg-gray-300 text-gray-800 rounded">30s</button>
+            <button id="time60" class=" px-4 py-2 bg-gray-300 text-gray-800 rounded">60s</button>
+            <button id="time120" class="px-4 py-2 bg-gray-300 text-gray-800 rounded">120s</button>
+        </div>
+        <div class="relative">
+            <p id="quote" class="text-xl mb-6"></p>
+            <textarea id="input" class="w-full p-2 text-black absolute inset-0 opacity-0" rows="4" placeholder="Start typing..."></textarea>
+        </div>
+        <div class="mt-4">
+            <span id="timer" class="text-lg">Time: 0s</span>
+            <span id="wpm" class="text-lg ml-4">WPM: 0</span>
+            <span id="errors" class="text-lg ml-4">Errors: 0</span>
+            <span id="accuracy" class="text-lg ml-4">Accuracy: 0%</span>
+        </div>
+        <div id="message" class="mt-4 text-lg hidden"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
