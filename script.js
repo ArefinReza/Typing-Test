@@ -1,10 +1,6 @@
-const quotes = {
-    easy: "Real keep change come see man you right order own look high large she number never part during year general public as leave since he possible life still change another new since form point not should interest both and way even stand long begin line system still so",
-    medium: "Success is not final, failure is not fatal: It is the courage to continue that counts. The only limit to our realization of tomorrow is our doubts of today.",
-    hard: "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. How razorback-jumping frogs can level six piqued gymnasts!"
-};
 
-let selectedQuote = quotes.easy;
+let quotes = { easy: [], medium: [], hard: [] };
+let selectedQuote = '';
 let selectedTime = 30;
 let startTime;
 let timerInterval;
@@ -16,6 +12,16 @@ const wpmEl = document.getElementById('wpm');
 const errorsEl = document.getElementById('errors');
 const accuracyEl = document.getElementById('accuracy');
 const messageEl = document.getElementById('message');
+const modalOverlay = document.getElementById('modal-overlay');
+const closeModal = document.getElementById('close-modal');
+
+// Fetch quotes from JSON file
+fetch('quotes.json')
+    .then(response => response.json())
+    .then(data => {
+        quotes = data;
+    })
+    .catch(error => console.error('Error fetching quotes:', error));
 
 document.getElementById('easy').addEventListener('click', () => setLevel('easy'));
 document.getElementById('medium').addEventListener('click', () => setLevel('medium'));
@@ -28,12 +34,18 @@ document.getElementById('time120').addEventListener('click', () => setTime(120))
 inputEl.addEventListener('input', onTyping);
 
 function setLevel(level) {
-    selectedQuote = quotes[level];
-    quoteEl.innerText = selectedQuote;
+    const quotesArray = quotes[level];
+    if (quotesArray.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotesArray.length);
+        selectedQuote = quotesArray[randomIndex];
+        quoteEl.innerText = selectedQuote;
+    } else {
+        quoteEl.innerText = 'No quotes available.';
+    }
+    
     inputEl.value = '';
     inputEl.disabled = false;
     inputEl.focus();
-    messageEl.classList.add('hidden');
     startTime = null;
     timerEl.innerText = 'Time: 0s';
     wpmEl.innerText = 'WPM: 0';
@@ -53,7 +65,7 @@ function setTime(seconds) {
     document.getElementById('time60').classList.remove('selected');
     document.getElementById('time120').classList.remove('selected');
     document.getElementById(`time${seconds}`).classList.add('selected');
- setLevel('easy');
+    setLevel('easy');
 }
 
 function onTyping() {
@@ -106,12 +118,14 @@ function updateTimer() {
 }
 
 function showCompletionMessage(wpm, accuracy) {
-    messageEl.innerText = `Congratulations! Your typing speed is ${wpm} WPM with ${accuracy}% accuracy.`;
-    messageEl.classList.remove('hidden');
+    messageEl.innerHTML = `Congratulations! Your typing speed is <strong>${wpm}</strong> WPM with <strong>${accuracy}%</strong> accuracy.`;
+    modalOverlay.style.display = 'flex';
 }
 
+closeModal.addEventListener('click', () => {
+    modalOverlay.style.display = 'none';
+});
 
-// _----------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('#buttons-container button');
     buttons.forEach(button => {
@@ -121,3 +135,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
